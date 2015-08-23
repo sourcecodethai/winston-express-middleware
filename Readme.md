@@ -1,17 +1,19 @@
-# express-winston
-[![Build Status](https://secure.travis-ci.org/bithavoc/express-winston.png)](http://travis-ci.org/bithavoc/express-winston)
+# winston-express-middleware
+[![Build Status](https://secure.travis-ci.org/hharnisc/winston-express-middleware.png)](http://travis-ci.org/hharnisc/winston-express-middleware)
 
 > [winston](https://github.com/flatiron/winston) middleware for express.js
 
+*Note: This is a fork of [express-winston](https://github.com/bithavoc/express-winston) with updates to the whitelisting system, using the latest winston, and bugfixes*
+
 ## Installation
 
-    npm install express-winston
+    npm install winston-express-middleware
 
 ## Usage
 
-express-winston provides middlewares for request and error logging of your express.js application.  It uses 'whitelists' to select properties from the request and (new in 0.2.x) response objects.
+winston-express-middleware provides middleware for request and error logging of your express.js application.  It uses 'whitelists' to select properties from the request and response objects.
 
-To make use of express-winston, you need to add the following to your application:
+To make use of winston-express-middleware, you need to add the following to your application:
 
 In `package.json`:
 
@@ -19,8 +21,8 @@ In `package.json`:
 {
   "dependencies": {
     "...": "...",
-    "winston": "0.6.x",
-    "express-winston": "0.2.x",
+    "winston": "1.0.x",
+    "winston-express-middleware": "0.1.x",
     "...": "..."
   }
 }
@@ -30,7 +32,7 @@ In `server.js` (or wherever you need it):
 
 ```
 var winston = require('winston'),
-    expressWinston = require('express-winston');
+    expressWinston = require('winston-express-middleware');
 ```
 
 ### Error Logging
@@ -51,7 +53,7 @@ Use `expressWinston.errorLogger(options)` to create a middleware that log the er
     }));
 ```
 
-The logger needs to be added AFTER the express router(`app.router)`) and BEFORE any of your custom error handlers(`express.handler`). Since express-winston will just log the errors and not __handle__ them, you can still use your custom error handler like `express.handler`, just be sure to put the logger before any of your handlers.
+The logger needs to be added AFTER the express router(`app.router)`) and BEFORE any of your custom error handlers(`express.handler`). Since winston-express-middleware will just log the errors and not __handle__ them, you can still use your custom error handler like `express.handler`, just be sure to put the logger before any of your handlers.
 
 ### Options
 
@@ -95,7 +97,7 @@ Use `expressWinston.logger(options)` to create a middleware to log your HTTP req
 
 ``` js
     var express = require('express');
-    var expressWinston = require('express-winston');
+    var expressWinston = require('winston-express-middleware');
     var winston = require('winston'); // for transports.Console
     var app = module.exports = express();
 
@@ -105,7 +107,7 @@ Use `expressWinston.logger(options)` to create a middleware to log your HTTP req
     // Let's make our express `Router` first.
     var router = express.Router();
     router.get('/error', function(req, res, next) {
-      // here we cause an error in the pipeline so we see express-winston in action.
+      // here we cause an error in the pipeline so we see winston-express-middleware in action.
       return next(new Error("This is an error and it should be logged to the console"));
     });
 
@@ -114,7 +116,7 @@ Use `expressWinston.logger(options)` to create a middleware to log your HTTP req
       res.end();
     });
 
-    // express-winston logger makes sense BEFORE the router.
+    // winston-express-middleware logger makes sense BEFORE the router.
     app.use(expressWinston.logger({
       transports: [
         new winston.transports.Console({
@@ -127,7 +129,7 @@ Use `expressWinston.logger(options)` to create a middleware to log your HTTP req
     // Now we can tell the app to use our routing code:
     app.use(router);
 
-    // express-winston errorLogger makes sense AFTER the router.
+    // winston-express-middleware errorLogger makes sense AFTER the router.
     app.use(expressWinston.errorLogger({
       transports: [
         new winston.transports.Console({
@@ -144,7 +146,7 @@ Use `expressWinston.logger(options)` to create a middleware to log your HTTP req
     }));
 
     app.listen(3000, function(){
-      console.log("express-winston demo listening on port %d in %s mode", this.address().port, app.settings.env);
+      console.log("winston-express-middleware demo listening on port %d in %s mode", this.address().port, app.settings.env);
     });
 ```
 
@@ -176,7 +178,7 @@ Browse `/` to see a regular HTTP logging like this:
       "message": "HTTP GET /favicon.ico"
     }
 
-Browse `/error` will show you how express-winston handles and logs the errors in the express pipeline like this:
+Browse `/error` will show you how winston-express-middleware handles and logs the errors in the express pipeline like this:
 
     {
       "date": "Thu Jul 19 2012 23:39:44 GMT-0500 (COT)",
@@ -225,8 +227,8 @@ Browse `/error` will show you how express-winston handles and logs the errors in
         "    at Router._dispatch (/Users/thepumpkin/Projects/testExpressWinston/node_modules/express/lib/router/index.js:280:4)",
         "    at Object.handle (/Users/thepumpkin/Projects/testExpressWinston/node_modules/express/lib/router/index.js:45:10)",
         "    at next (/Users/thepumpkin/Projects/testExpressWinston/node_modules/express/node_modules/connect/lib/http.js:204:15)",
-        "    at done (/Users/thepumpkin/Dropbox/Projects/express-winston/index.js:91:14)",
-        "    at /Users/thepumpkin/Dropbox/Projects/express-winston/node_modules/async/lib/async.js:94:25",
+        "    at done (/Users/thepumpkin/Dropbox/Projects/winston-express-middleware/index.js:91:14)",
+        "    at /Users/thepumpkin/Dropbox/Projects/winston-express-middleware/node_modules/async/lib/async.js:94:25",
         "    at [object Object].log (/Users/thepumpkin/Projects/testExpressWinston/node_modules/winston/lib/winston/transports/console.js:87:3)"
       ],
       "req": {
@@ -283,7 +285,7 @@ Note that you can log the whole request and/or response body:
 
 ## Route-Specific Whitelists and Blacklists
 
-New in version 0.2.x is the ability to add whitelist elements in a route.  express-winston adds a `_routeWhitelists` object to the `req`uest, containing `.body`, `.req` and .res` properties, to which you can set an array of 'whitelist' parameters to include in the log, specific to the route in question:
+You can add whitelist elements in a route.  winston-express-middleware adds a `_routeWhitelists` object to the `req`uest, containing `.body`, `.req` and .res` properties, to which you can set an array of 'whitelist' parameters to include in the log, specific to the route in question:
 
 ``` js
     router.post('/user/register', function(req, res, next) {
@@ -356,7 +358,7 @@ Generate the `coverage.html` coverage report:
 
 ## Issues and Collaboration
 
-If you ran into any problems, please use the project [Issues section](https://github.com/bithavoc/express-winston/issues) to search or post any bug.
+If you ran into any problems, please use the project [Issues section](https://github.com/bithavoc/winston-express-middleware/issues) to search or post any bug.
 
 ## Contributors
 
@@ -365,25 +367,3 @@ If you ran into any problems, please use the project [Issues section](https://gi
 * [Jonathan Lomas](https://github.com/floatingLomas) (https://github.com/floatingLomas)
 
 Also see AUTHORS file, add yourself if you are missing.
-
-## MIT License
-
-Copyright (c) 2012-2014 Bithavoc.io and Contributors - http://bithavoc.io
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.

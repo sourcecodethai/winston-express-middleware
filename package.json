@@ -1,10 +1,10 @@
 {
   "author": {
-    "name": "bithavoc",
-    "email": "im@bithavoc.io",
-    "url": "http://bithavoc.io"
+    "name": "hharnisc",
+    "email": "hharnisc@gmail.com",
+    "url": "http://hharnisc.github.io"
   },
-  "name": "express-winston",
+  "name": "winston-express-middleware",
   "description": "express.js middleware for flatiron/winston",
   "keywords": [
     "winston",
@@ -17,14 +17,14 @@
     "middleware",
     "colors"
   ],
-  "version": "0.3.1",
+  "version": "0.1.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bithavoc/express-winston.git"
+    "url": "https://github.com/hharnisc/winston-express-middleware.git"
   },
   "bugs": {
-    "url": "http://github.com/bithavoc/express-winston/issues",
-    "email": "im@bithavoc.io"
+    "url": "http://github.com/hharnisc/winston-express-middleware/issues",
+    "email": "hharnisc@gmail.com"
   },
   "main": "index.js",
   "scripts": {
@@ -49,7 +49,7 @@
   "dependencies": {
     "chalk": "~0.4.0",
     "lodash": "~3.10.1",
-    "winston": "~0.9.0"
+    "winston": "~1.0.1"
   },
   "devDependencies": {
     "blanket": "~1.1.6",

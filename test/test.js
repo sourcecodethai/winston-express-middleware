@@ -153,6 +153,9 @@ describe('expressWinston', function () {
         function next(pipelineError) {
           test.pipelineError = pipelineError;
 
+          // response is included in error messages
+          res.end();
+
           result = test;
 
           return done();
