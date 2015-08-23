@@ -283,6 +283,12 @@ Note that you can log the whole request and/or response body:
     expressWinston.requestWhitelist.push('body');
     expressWinston.responseWhitelist.push('body');
 
+If you need more fine grained control you can also specify sub-keys of request and response objects. Let's say you want to log the remoteAddress of the request without the entire connection object:
+
+Example:
+    expressWinston.requestWhitelist.push("connection.remoteAddress");
+
+
 ## Route-Specific Whitelists and Blacklists
 
 You can add whitelist elements in a route.  winston-express-middleware adds a `_routeWhitelists` object to the `req`uest, containing `.body`, `.req` and .res` properties, to which you can set an array of 'whitelist' parameters to include in the log, specific to the route in question:
