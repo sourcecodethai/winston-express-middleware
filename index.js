@@ -161,6 +161,19 @@ function logger(options) {
     options.expressFormat = options.expressFormat || false;
     options.ignoreRoute = options.ignoreRoute || function () { return false; };
     options.skip = options.skip || defaultSkip;
+    // new options
+    options.customLogger = options.customLogger || null;
+    options.filterOutList = options.filterOutList || []; // example: ['dropdown', 'loggedin', 'query-table', 'query-last-package-number', '.png', '.woff', '.ttf', 'jquery.nanoscroller', 'favicon.ico'];
+    options.noExportData = options.noExportData || true;
+    options.noHeader = options.noHeader || true;
+    options.noBody = options.noBody || false;
+ 
+    var _logger;
+    if (options.customLogger !== null) {
+        _logger = options.customLogger;
+    } else {
+        _logger = options.winstonInstance;
+    }
 
     // Using mustache style templating
     var template = _.template(options.msg, null, {
@@ -182,6 +195,45 @@ function logger(options) {
         req._routeBlacklists = {
             body: []
         };
+
+        // try to log request first
+        if (options.expressFormat) {
+            var msg = chalk.grey(req.method + " " + req.url || req.url)
+                + " " + chalk[statusColor](res.statusCode)
+                + " " + chalk.grey(res.responseTime + "ms");
+        } else {
+            var msg = template({ req: req, res: res });
+        }
+        if (!options.skip(req, res) && !options.ignoreRoute(req, res)) {
+
+            // filter out messages from array
+            var canWriteLogReq = true;
+            var arr = options.filterOutList;
+            for(var i = 0; i != arr.length; i++) {
+                var arrItem = arr[i];
+                if(msg.includes(arrItem)) {
+                    canWriteLog = false; // log will not write if found an item in filter out array
+                }
+            }
+            
+            if (canWriteLogReq) {
+                //var reqMsg = msg + "Request from FE - header: " + JSON.stringify(req.headers) + " body: " + JSON.stringify(req.body);
+                var reqMsg = msg + "Request from FE -";
+                
+                if (!options.noHeader) {
+                    reqMsg += " header: " + JSON.stringify(req.headers);
+                }
+
+                if (!options.noBody) {
+                    reqMsg += " body: " + JSON.stringify(req.body);
+                }
+
+                _logger.info(reqMsg);
+                // options.winstonInstance.log(options.level, reqMsg);
+            }
+
+        }
+
 
         // Manage to get information from the response too, just like Connect.logger does:
         var end = res.end;
@@ -247,16 +299,38 @@ function logger(options) {
               meta.responseTime = res.responseTime;
             }
 
-            if(options.expressFormat) {
-              var msg = chalk.grey(req.method + " " + req.url || req.url)
-                + " " + chalk[statusColor](res.statusCode)
-                + " " + chalk.grey(res.responseTime+"ms");
-            } else {
-              var msg = template({req: req, res: res});
-            }
             // This is fire and forget, we don't want logging to hold up the request so don't wait for the callback
-            if (!options.skip(req, res) && !options.ignoreRoute(req, res)) {
-              options.winstonInstance.log(options.level, msg, meta);
+            if (!options.skip(req, res) && !options.ignoreRoute(req, res) && req.method !== 'OPTIONS') {
+                if(options.noExportData && msg.includes('/export')) {
+                    delete res.body['resultData'];
+                }
+
+                var canWriteLogRes = true;
+                for (var i = 0; i != arr.length; i++) {
+                    var arrItem = arr[i];
+                    if (msg.includes(arrItem)) {
+                        canWriteLogRes = false; // log will not write if found an item in filter out array
+                    }
+                }
+
+                if (canWriteLogRes) {
+                    //var resMsg = msg + "Response to FE - header: " + JSON.stringify(res.header()._headers) + " body: " + JSON.stringify(res.body) + ", statusCode: " + res.statusCode + ", responseTime: " + res.responseTime + "ms";
+                    var reqMsg = msg + "Response to FE -";
+
+                    if (!options.noHeader) {
+                        reqMsg += " header: " + JSON.stringify(res.header()._headers);
+                    }
+
+                    if (!options.noBody) {
+                        reqMsg += " body: " + JSON.stringify(req.body);
+                    }
+
+                    reqMsg += ", statusCode: " + res.statusCode + ", responseTime: " + res.responseTime + "ms";
+
+                    _logger.info(reqMsg);
+                // options.winstonInstance.log(options.level, msg, meta);
+                }
+
             }
         };
 
