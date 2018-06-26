@@ -1,3 +1,32 @@
+# NEW Options
+
+```
+// app.js
+
+// setup log4js
+var log4js = require('log4js');
+log4js.configure('./app/config/log4js_config.json');
+var log4jsLogger = log4js.getLogger('bluefin-ltc');
+
+app.use(expressWinston.logger({
+    transports: [fileTransport],
+    meta: true, // optional: control whether you want to log the meta data about the request (default to true)
+    msg: "phoenix-partner - :: ## {{req.session.userName}} - {{req.session.id}} - {{req.id}} ## HTTP {{req.method}} {{req.url}} ", //request-body:{{JSON.stringify(req.body)}}", // -- response-body:{{JSON.stringify(res.body)}}", // optional: customize the default logging message. E.g. "{{res.statusCode}} {{req.method}} {{res.responseTime}}ms {{req.url}}"
+    expressFormat: false, // Use the default Express/morgan request formatting, with the same colors. Enabling this will override any msg and colorStatus if true. Will only output colors on transports with colorize set to true
+    colorStatus: true, // Color the status code, using the Express/morgan color palette (default green, 3XX cyan, 4XX yellow, 5XX red). Will not be recognized if expressFormat is true
+    ignoreRoute: function (req, res) {
+        return false;
+    }, // optional: allows to skip some log messages based on request and/or response
+    // NEW OPTIONS
+    customLogger: log4jsLogger, // use log4jsLogger in expressWinston
+    filterOutList: ['dropdown', 'loggedin', 'query-table', 'query-last-package-number', '.png', '.woff', '.ttf', 'jquery.nanoscroller', 'favicon.ico'], // not log any messages that have one of these words
+    noExportData: true, // remove resultData in case message has '/export'
+    noHeader: true, // not log headers if true
+    noBody: false // not log body if true
+}));
+```
+
+
 # winston-express-middleware
 [![Build Status](https://secure.travis-ci.org/hharnisc/winston-express-middleware.png)](http://travis-ci.org/hharnisc/winston-express-middleware)
 
