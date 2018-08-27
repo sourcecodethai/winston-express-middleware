@@ -277,6 +277,7 @@ function logger(options) {
                     && res._headers['content-type'].indexOf('json') >= 0);
 
                   meta.res.body =  isJson ? JSON.parse(chunk) : chunk.toString();
+                  res.body = meta.res.body;
                 }
               }
 
@@ -315,19 +316,19 @@ function logger(options) {
 
                 if (canWriteLogRes) {
                     //var resMsg = msg + "Response to FE - header: " + JSON.stringify(res.header()._headers) + " body: " + JSON.stringify(res.body) + ", statusCode: " + res.statusCode + ", responseTime: " + res.responseTime + "ms";
-                    var reqMsg = msg + "Response to FE -";
+                    var resMsg = msg + "Response to FE -";
 
                     if (!options.noHeader) {
-                        reqMsg += " header: " + JSON.stringify(res.header()._headers);
+                        resMsg += " header: " + JSON.stringify(res.header()._headers);
                     }
 
                     if (!options.noBody) {
-                        reqMsg += " body: " + JSON.stringify(req.body);
+                        resMsg += " body: " + JSON.stringify(res.body);
                     }
 
-                    reqMsg += ", statusCode: " + res.statusCode + ", responseTime: " + res.responseTime + "ms";
+                    resMsg += ", statusCode: " + res.statusCode + ", responseTime: " + res.responseTime + "ms";
 
-                    _logger.info(reqMsg);
+                    _logger.info(resMsg);
                 // options.winstonInstance.log(options.level, msg, meta);
                 }
 
