@@ -204,7 +204,7 @@ function logger(options) {
         } else {
             var msg = template({ req: req, res: res });
         }
-        if (!options.skip(req, res) && !options.ignoreRoute(req, res)) {
+        if (!options.skip(req, res) && !options.ignoreRoute(req, res) && req.method !== 'OPTIONS') {
 
             // filter out messages from array
             var canWriteLogReq = true;
