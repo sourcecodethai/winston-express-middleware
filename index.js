@@ -164,8 +164,8 @@ function logger(options) {
     // new options
     options.customLogger = options.customLogger || null;
     options.filterOutList = options.filterOutList || []; // example: ['dropdown', 'loggedin', 'query-table', 'query-last-package-number', '.png', '.woff', '.ttf', 'jquery.nanoscroller', 'favicon.ico'];
-    options.noExportData = options.noExportData || true;
-    options.noHeader = options.noHeader || true;
+    options.noExportData = options.noExportData;
+    options.noHeader = options.noHeader;
     options.noBody = options.noBody || false;
  
     var _logger;
