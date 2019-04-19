@@ -218,14 +218,14 @@ function logger(options) {
             
             if (canWriteLogReq) {
                 //var reqMsg = msg + "Request from FE - header: " + JSON.stringify(req.headers) + " body: " + JSON.stringify(req.body);
-                var reqMsg = msg + "Request from FE -";
+                var reqMsg = msg + "";
                 
                 if (!options.noHeader) {
-                    reqMsg += " header: " + JSON.stringify(req.headers);
+                    reqMsg += " |ACCESSTOKEN=" + JSON.stringify(req.headers.authorization);
                 }
 
                 if (!options.noBody) {
-                    reqMsg += " body: " + JSON.stringify(req.body);
+                    reqMsg += " |BODY=" + JSON.stringify(req.body);
                 }
 
                 _logger.info(reqMsg);
@@ -316,17 +316,17 @@ function logger(options) {
 
                 if (canWriteLogRes) {
                     //var resMsg = msg + "Response to FE - header: " + JSON.stringify(res.header()._headers) + " body: " + JSON.stringify(res.body) + ", statusCode: " + res.statusCode + ", responseTime: " + res.responseTime + "ms";
-                    var resMsg = msg + "Response to FE -";
+                    var resMsg = msg + "";
 
                     if (!options.noHeader) {
-                        resMsg += " header: " + JSON.stringify(res.header()._headers);
+                        resMsg += " |ACCESSTOKEN=" + JSON.stringify(res.header()._headers.authorization);
                     }
 
                     if (!options.noBody) {
-                        resMsg += " body: " + JSON.stringify(res.body);
+                        resMsg += " |BODY=" + JSON.stringify(res.body);
                     }
 
-                    resMsg += ", statusCode: " + res.statusCode + ", responseTime: " + res.responseTime + "ms";
+                    resMsg += " |STATUS=" + res.statusCode + " |DESC=" + res.description + " |RESPONSETIME:" + res.responseTime + "ms";
 
                     _logger.info(resMsg);
                 // options.winstonInstance.log(options.level, msg, meta);
