@@ -91,6 +91,10 @@ var defaultSkip = function() {
   return false;
 };
 
+/**
+ * accressToken Request 
+ */
+var accressTokenReq = '';
 function filterObject(originalObj, whiteList, initialFilter) {
     var obj = {};
     var fieldsSet = false;
@@ -222,6 +226,7 @@ function logger(options) {
                 
                 if (!options.noHeader) {
                     reqMsg += " |ACCESSTOKEN=" + JSON.stringify(req.headers.authorization);
+					accressTokenReq = req.headers.authorization
                 }
 
                 if (!options.noBody) {
@@ -319,7 +324,7 @@ function logger(options) {
                     var resMsg = msg + "";
 
                     if (!options.noHeader) {
-                        resMsg += " |ACCESSTOKEN=" + JSON.stringify(res.header()._headers.authorization);
+                        resMsg += " |ACCESSTOKEN=" + accressTokenReq;
                     }
 
                     if (!options.noBody) {
