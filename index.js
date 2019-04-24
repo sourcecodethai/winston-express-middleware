@@ -330,8 +330,111 @@ function logger(options) {
                     if (!options.noBody) {
                         resMsg += " |BODY=" + JSON.stringify(res.body);
                     }
+					
+					var des = '';
+					if(res && (res.statusCode === 200 || res.statusCode === '200')){
+						des = 'OK';
+					}else if(res && (res.statusCode === 201 || res.statusCode === '201')){
+						des = 'Created';
+					}else if(res && (res.statusCode === 202 || res.statusCode === '202')){
+						des = 'Accepted';
+					}else if(res && (res.statusCode === 203 || res.statusCode === '203')){
+						des = 'Non-Authoritative Information';
+					}else if(res && (res.statusCode === 204 || res.statusCode === '204')){
+						des = 'No Content';
+					}else if(res && (res.statusCode === 205 || res.statusCode === '205')){
+						des = 'Reset Content';
+					}else if(res && (res.statusCode === 206 || res.statusCode === '206')){
+						des = 'Partial Content';
+					}else if(res && (res.statusCode === 207 || res.statusCode === '207')){
+						des = 'Multi-Status';
+					}else if(res && (res.statusCode === 208 || res.statusCode === '208')){
+						des = 'Already Reported';
+					}else if(res && (res.statusCode === 304 || res.statusCode === '304')){
+						des = 'Not Modified';
+					}else if(res && (res.statusCode === 305 || res.statusCode === '305')){
+						des = 'Use Proxy';
+					}else if(res && (res.statusCode === 306 || res.statusCode === '306')){
+						des = 'Switch Proxy';
+					}else if(res && (res.statusCode === 307 || res.statusCode === '307')){
+						des = 'Temporary Redirect';
+					}else if(res && (res.statusCode === 308 || res.statusCode === '308')){
+						des = 'Permanent Redirect';
+					}else if(res && (res.statusCode === 400 || res.statusCode === '400')){
+						des = 'Bad Request';
+					}else if(res && (res.statusCode === 401 || res.statusCode === '401')){
+						des = 'Unauthorized';
+					}else if(res && (res.statusCode === 402 || res.statusCode === '402')){
+						des = 'Payment Required';
+					}else if(res && (res.statusCode === 403 || res.statusCode === '403')){
+						des = 'Forbidden';
+					}else if(res && (res.statusCode === 404 || res.statusCode === '404')){
+						des = 'Not Found';
+					}else if(res && (res.statusCode === 405 || res.statusCode === '405')){
+						des = 'Method Not Allowed';
+					}else if(res && (res.statusCode === 406 || res.statusCode === '406')){
+						des = 'Not Acceptable';
+					}else if(res && (res.statusCode === 407 || res.statusCode === '407')){
+						des = 'Proxy Authentication Required';
+					}else if(res && (res.statusCode === 408 || res.statusCode === '408')){
+						des = 'Request Timeout';
+					}else if(res && (res.statusCode === 500 || res.statusCode === '500')){
+						des = 'Internal Server Error';
+					}else if(res && (res.statusCode === 501 || res.statusCode === '501')){
+						des = 'Not Implemented';
+					}else if(res && (res.statusCode === 502 || res.statusCode === '502')){
+						des = 'Bad Gateway';
+					}else if(res && (res.statusCode === 503 || res.statusCode === '503')){
+						des = 'Service Unavailable';
+					}else if(res && (res.statusCode === 504 || res.statusCode === '504')){
+						des = 'Gateway Timeout';
+					}else if(res && (res.statusCode === 505 || res.statusCode === '505')){
+						des = 'HTTP Version Not Supported';
+					}else if(res && (res.statusCode === 506 || res.statusCode === '506')){
+						des = 'Variant Also Negotiates';
+					}else if(res && (res.statusCode === 507 || res.statusCode === '507')){
+						des = 'Insufficient Storage';
+					}else if(res && (res.statusCode === 508 || res.statusCode === '508')){
+						des = 'Loop Detected';
+					}else if(res && (res.statusCode === 510 || res.statusCode === '510')){
+						des = 'Not Extended';
+					}else if(res && (res.statusCode === 511 || res.statusCode === '511')){
+						des = 'Network Authentication Required';
+					}else if(res && (res.statusCode === 544 || res.statusCode === '544')){
+						des = 'Network Authentication Required';
+					}else if(res && (res.statusCode === 444 || res.statusCode === '444')){
+						des = 'No Response';
+					}else if(res && (res.statusCode === 494 || res.statusCode === '494')){
+						des = 'Request header too large';
+					}else if(res && (res.statusCode === 495 || res.statusCode === '495')){
+						des = 'SSL Certificate Error';
+					}else if(res && (res.statusCode === 496 || res.statusCode === '496')){
+						des = 'SSL Certificate Required';
+					}else if(res && (res.statusCode === 497 || res.statusCode === '497')){
+						des = 'HTTP Request Sent to HTTPS Port';
+					}else if(res && (res.statusCode === 499 || res.statusCode === '499')){
+						des = 'Client Closed Request';
+					}else if(res && (res.statusCode === 520 || res.statusCode === '520')){
+						des = 'Unknown Error';
+					}else if(res && (res.statusCode === 521 || res.statusCode === '521')){
+						des = 'Web Server Is Down';
+					}else if(res && (res.statusCode === 522 || res.statusCode === '522')){
+						des = 'Connection Timed Out';
+					}else if(res && (res.statusCode === 523 || res.statusCode === '523')){
+						des = 'Origin Is Unreachable';
+					}else if(res && (res.statusCode === 524 || res.statusCode === '524')){
+						des = 'A Timeout Occurred';
+					}else if(res && (res.statusCode === 525 || res.statusCode === '525')){
+						des = 'SSL Handshake Failed';
+					}else if(res && (res.statusCode === 526 || res.statusCode === '526')){
+						des = 'Invalid SSL Certificate';
+					}else if(res && (res.statusCode === 527 || res.statusCode === '527')){
+						des = 'Railgun Error';
+					}else if(res && (res.statusCode === 530 || res.statusCode === '530')){
+						des = 'Origin DNS Error';
+					}
 
-                    resMsg += " |STATUS=" + res.statusCode + " |DESC=" + res.description + " |RESPONSETIME:" + res.responseTime + "ms";
+                    resMsg += " |STATUS=" + res.statusCode + " |DESC=" + des + " |RESPONSETIME:" + res.responseTime + "ms";
 
                     _logger.info(resMsg);
                 // options.winstonInstance.log(options.level, msg, meta);
@@ -366,3 +469,4 @@ module.exports.defaultRequestFilter = defaultRequestFilter;
 module.exports.defaultResponseFilter = defaultResponseFilter;
 module.exports.defaultSkip = defaultSkip;
 module.exports.ignoredRoutes = ignoredRoutes;
+
