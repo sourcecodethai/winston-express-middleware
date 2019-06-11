@@ -323,6 +323,9 @@ function logger(options) {
                     }
 
                     if (!options.noBody) {
+                        if (options.noResultData) {
+                          delete res.body['resultData'];
+                        }
                         resMsg += " body: " + JSON.stringify(res.body);
                     }
 
