@@ -167,7 +167,7 @@ function logger(options) {
     options.noExportData = options.noExportData;
     options.noHeader = options.noHeader;
     options.noBody = options.noBody || false;
- 
+
     var _logger;
     if (options.customLogger !== null) {
         _logger = options.customLogger;
@@ -215,11 +215,11 @@ function logger(options) {
                     canWriteLog = false; // log will not write if found an item in filter out array
                 }
             }
-            
+
             if (canWriteLogReq) {
                 //var reqMsg = msg + "Request from FE - header: " + JSON.stringify(req.headers) + " body: " + JSON.stringify(req.body);
                 var reqMsg = msg + "Request from FE -";
-                
+
                 if (!options.noHeader) {
                     reqMsg += " header: " + JSON.stringify(req.headers);
                 }
@@ -323,6 +323,9 @@ function logger(options) {
                     }
 
                     if (!options.noBody) {
+                        if (options.hideResultData) {
+                          delete res.body['resultData'];
+                        }
                         resMsg += " body: " + JSON.stringify(res.body);
                     }
 
