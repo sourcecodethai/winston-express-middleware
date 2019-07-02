@@ -92,7 +92,7 @@ var defaultSkip = function() {
 };
 
 /**
- * accressToken Request 
+ * accressToken Request
  */
 var accressTokenReq = '';
 function filterObject(originalObj, whiteList, initialFilter) {
@@ -171,7 +171,7 @@ function logger(options) {
     options.noExportData = options.noExportData;
     options.noHeader = options.noHeader;
     options.noBody = options.noBody || false;
- 
+
     var _logger;
     if (options.customLogger !== null) {
         _logger = options.customLogger;
@@ -219,11 +219,11 @@ function logger(options) {
                     canWriteLog = false; // log will not write if found an item in filter out array
                 }
             }
-            
+
             if (canWriteLogReq) {
                 //var reqMsg = msg + "Request from FE - header: " + JSON.stringify(req.headers) + " body: " + JSON.stringify(req.body);
                 var reqMsg = msg + "";
-                
+
                 if (!options.noHeader) {
                     reqMsg += " |ACCESSTOKEN=" + JSON.stringify(req.headers.authorization);
 					accressTokenReq = req.headers.authorization
@@ -328,9 +328,12 @@ function logger(options) {
                     }
 
                     if (!options.noBody) {
+                      if (options.hideResultData) {
+                          delete res.body['resultData'];
+                        }
                         resMsg += " |BODY=" + JSON.stringify(res.body);
                     }
-					
+
 					var des = '';
 					if(res && (res.statusCode === 200 || res.statusCode === '200')){
 						des = 'OK';
@@ -469,4 +472,3 @@ module.exports.defaultRequestFilter = defaultRequestFilter;
 module.exports.defaultResponseFilter = defaultResponseFilter;
 module.exports.defaultSkip = defaultSkip;
 module.exports.ignoredRoutes = ignoredRoutes;
-
